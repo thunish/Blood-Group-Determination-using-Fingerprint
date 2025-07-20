@@ -13,6 +13,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 model = tf.keras.models.load_model("./model/model.h5")
+os.makedirs("./tmp/uploads", exist_ok=True)
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
 
