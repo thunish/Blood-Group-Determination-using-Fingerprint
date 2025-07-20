@@ -70,4 +70,5 @@ def predict():
     
 if __name__=='__main__':
     print("The server is live on port 3000")
-    app.run(debug=False, host='0.0.0.0', port=3000)
+    PORT = int(os.environ.get("PORT", 3000))  
+    app.run(host='0.0.0.0', port=PORT)
