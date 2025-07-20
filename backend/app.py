@@ -45,7 +45,7 @@ def predict():
             "msg":"Invalid file type. Allowed file type are .png, .jpg, .bmp, .jpeg"
         }), 410
     filename=str(uuid.uuid4())+"_"+str(secure_filename(file.filename))
-    file_path=os.path.join("./uploads", str(filename))
+    file_path=os.path.join("./tmp/uploads", str(filename))
     file.save(file_path)
     try:
         img=preprocessing(file_path)

@@ -54,7 +54,7 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/predict", formData, {
+      const response = await axios.post("https://blood-group-determination-using.onrender.com/predict", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       setPrediction(response.data.predicted_label);
