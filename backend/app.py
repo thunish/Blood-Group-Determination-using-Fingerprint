@@ -12,11 +12,11 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Load model only once
+# Load model once
 print("[INFO] Loading model...")
 model = tf.keras.models.load_model("./model/model.h5")
 
-# Ensure upload directory exists (important for Render!)    
+# Ensure upload directory exists
 UPLOAD_FOLDER = './tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -34,6 +34,10 @@ def preprocessing(file_path):
     return img_array
 
 class_names = ['A+', 'A-', 'AB+', 'AB-', 'B+', 'B-', 'O+', 'O-']
+
+@app.route('/', methods=["GET"])
+def home():
+    return jsonify({"msg": "API is working ✅"}), 200
 
 @app.route('/predict', methods=["POST"])
 def predict():
@@ -61,9 +65,17 @@ def predict():
         predictions = model.predict(img)
         predicted_class = int(np.argmax(predictions[0]))
         predicted_label = class_names[predicted_class]
-        confidence = float(np.max(predictions[0]))  # confidence was wrong before
+        confidence = float(np.max(predictions[0]))
 
         print("[INFO] Prediction successful")
+
+        # Clean up the uploaded file
+        try:
+            os.remove(file_path)
+            print("[INFO] Temporary file deleted:", file_path)
+        except Exception as delete_err:
+            print("[WARNING] Could not delete file:", delete_err)
+
         return jsonify({
             "msg": "Prediction successful",
             "predicted_class": predicted_class,
